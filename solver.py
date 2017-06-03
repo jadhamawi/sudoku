@@ -18,46 +18,17 @@ class Board:
         for i in range(0,81):
             self.grid.append(0)
 
-        # #temporary
-        # for i in range(0,81):
-        #     grid[i] = random.randint(0,9)
-
-        #let's try to fill the first row
-
-        #digits = range(1,10)
-
-        # for i in range(0,81):
-        #     #print(i)
-        #     self.print_board()
-        #     digit = random.randint(1,9)
-        #     while not(self.check_row(i,digit) == True and self.check_col(i,digit) == True):
-        #         digit = random.randint(1,9)
-        #     self.grid[i] = digit
-        #     #check if col contains temp
-        #     #check if block contains temp
-        #     #if none of them contain temp:
-        #         #set grid[i] to temp
-
         #let's try a backtracking approach
-        #for i in range(0,81):
         idx = 0
 
         while 0 in self.grid:
-            # if idx < 25:
-            #     print(idx)
-            #     self.print_board()
-            print(idx)
-            self.print_board()
             if self.grid[idx] < 9:
                 digit = self.grid[idx] + 1
             else:
                 self.grid[idx] = 0
                 idx = idx-1
                 digit = 0
-            #while not(self.check_sudoku_conditions(idx,digit)):
-            while digit!=0 and not(self.check_row(idx,digit) and self.check_col(idx,digit) and self.check_block(idx,digit)):
-            #while not(self.check_row(idx,digit) and self.check_col(idx,digit)):
-            #while not(self.check_block(idx,digit)):
+            while digit!=0 and not(self.check_sudoku_conditions(idx,digit)):
                 digit = digit + 1
                 if digit > 9:
                     digit = 0
@@ -65,7 +36,7 @@ class Board:
                     idx = idx-1
                     break
 
-            if digit!=0: #and self.check_sudoku_conditions(idx,digit): #and self.check_row(idx,digit) == True and self.check_col(idx,digit) == True:
+            if digit!=0:
                 self.grid[idx] = digit
                 idx = idx + 1
 
@@ -74,10 +45,10 @@ class Board:
         b = self.check_col(i, digit)
         c = self.check_block(i, digit)
         if a and b and c:
-            print('meets sudoku conditions')
+            #print('meets sudoku conditions')
             return True
         else:
-            print('uh-oh')
+            #print('uh-oh')
             return False
 
     def check_row(self, i, digit):
@@ -118,9 +89,9 @@ class Board:
     def get_square(self, row, col):
         #ensure row and col are appropriate
         if self.validate_value(row) == False:
-            print('invalid row')
+            print('get - invalid row')
         if self.validate_value(col) == False:
-            print('invalid column')
+            print('get - invalid column')
 
         #return the value in the grid
         idx = (row - 1) * 9 + (col - 1)
@@ -129,14 +100,11 @@ class Board:
     def set_square(self, row, col, val):
         #ensure row and col are appropriate
         if self.validate_value(row) == False:
-            print('invalid row')
+            print('set - invalid row')
         if self.validate_value(col) == False:
-            print('invalid column')
+            print('set - invalid column')
 
         #ensure value is appropriate
-        # if not(val > 0 and val < 10):
-        #     #error
-        #     print('inappropriate value')
         if self.validate_value(val) == False:
             print('invalid value')
         else:
@@ -156,7 +124,6 @@ class Board:
             if i%27 == 0 and i!=0:
                 print('')
                 print('---------------------')
-                #print('_____________________')
             print(grid[i],end=' ')
 
         print('')
