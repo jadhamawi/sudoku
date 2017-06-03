@@ -26,17 +26,54 @@ class Board:
 
         #digits = range(1,10)
 
-        for i in range(0,81):
-            #print(i)
+        # for i in range(0,81):
+        #     #print(i)
+        #     self.print_board()
+        #     digit = random.randint(1,9)
+        #     while not(self.check_row(i,digit) == True and self.check_col(i,digit) == True):
+        #         digit = random.randint(1,9)
+        #     self.grid[i] = digit
+        #     #check if col contains temp
+        #     #check if block contains temp
+        #     #if none of them contain temp:
+        #         #set grid[i] to temp
+
+        #let's try a backtracking approach
+        #for i in range(0,81):
+        idx = 0
+
+        while 0 in self.grid:
+            # if idx < 25:
+            #     print(idx)
+            #     self.print_board()
+            print(idx)
             self.print_board()
-            digit = random.randint(1,9)
-            while not(self.check_row(i,digit) == True and self.check_col(i,digit) == True):
-                digit = random.randint(1,9)
-            self.grid[i] = digit
-            #check if col contains temp
-            #check if block contains temp
-            #if none of them contain temp:
-                #set grid[i] to temp
+            digit = self.grid[idx] + 1
+            #while not(self.check_sudoku_conditions(idx,digit)):
+            #while not(self.check_row(idx,digit) and self.check_col(idx,digit) and self.check_block(idx,digit)):
+            while not(self.check_row(idx,digit) and self.check_col(idx,digit)):
+            #while not(self.check_block(idx,digit)):
+                digit = digit + 1
+                if digit > 9:
+                    digit = 0
+                    self.grid[idx] = 0
+                    idx = idx-1
+                    break
+
+            if digit!=0: #and self.check_sudoku_conditions(idx,digit): #and self.check_row(idx,digit) == True and self.check_col(idx,digit) == True:
+                self.grid[idx] = digit
+                idx = idx + 1
+
+    def check_sudoku_conditions(self, i, digit):
+        a = self.check_row(i, digit)
+        b = self.check_col(i, digit)
+        c = self.check_block(i, digit)
+        if a and b and c:
+            print('meets sudoku conditions')
+            return True
+        else:
+            print('uh-oh')
+            return False
 
     def check_row(self, i, digit):
     #returns True if the digit is not already contained in the row
@@ -58,9 +95,20 @@ class Board:
 
         return True
 
-    #def check_block(self,i, digit):
+    def check_block(self,i, digit):
     #returns True if the digit is not already contained in the block
+        #an x value of 0 denotes left, 1 is middle, 2 is right
+        x = i%27%9/3
+        #y value of 0 represents top, 1 is middle, 2 is bottom
+        y = i/27
 
+        for j in range(0,81):
+            if j%27%9/3 == x and j/27 == y:
+            #i.e. if j is in the same block as i
+                if self.grid[j] == digit:
+                    return False
+
+        return True
 
     def get_square(self, row, col):
         #ensure row and col are appropriate
