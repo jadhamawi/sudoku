@@ -48,10 +48,15 @@ class Board:
             #     self.print_board()
             print(idx)
             self.print_board()
-            digit = self.grid[idx] + 1
+            if self.grid[idx] < 9:
+                digit = self.grid[idx] + 1
+            else:
+                self.grid[idx] = 0
+                idx = idx-1
+                digit = 0
             #while not(self.check_sudoku_conditions(idx,digit)):
-            #while not(self.check_row(idx,digit) and self.check_col(idx,digit) and self.check_block(idx,digit)):
-            while not(self.check_row(idx,digit) and self.check_col(idx,digit)):
+            while digit!=0 and not(self.check_row(idx,digit) and self.check_col(idx,digit) and self.check_block(idx,digit)):
+            #while not(self.check_row(idx,digit) and self.check_col(idx,digit)):
             #while not(self.check_block(idx,digit)):
                 digit = digit + 1
                 if digit > 9:
