@@ -7,6 +7,7 @@ class Board:
     def __init__(self):
         #board size
         self.board = self.create_board()
+        self.print_board()
 
     def create_board(self):
         self.grid = []
@@ -25,10 +26,11 @@ class Board:
 
         #digits = range(1,10)
 
-        for i in range(0,9):
+        for i in range(0,81):
+            #print(i)
+            self.print_board()
             digit = random.randint(1,9)
-            print(self.check_row(i,digit))
-            while self.check_row(i,digit) == False:
+            while not(self.check_row(i,digit) == True and self.check_col(i,digit) == True):
                 digit = random.randint(1,9)
             self.grid[i] = digit
             #check if col contains temp
@@ -37,6 +39,7 @@ class Board:
                 #set grid[i] to temp
 
     def check_row(self, i, digit):
+    #returns True if the digit is not already contained in the row
         row = i/9 + 1
 
         for col in range(1,10):
@@ -46,6 +49,7 @@ class Board:
         return True
 
     def check_col(self, i, digit):
+    #returns True if the digit is not already contained in the column
         col = i%9 + 1
 
         for row in range(1,10):
@@ -54,9 +58,16 @@ class Board:
 
         return True
 
+    #def check_block(self,i, digit):
+    #returns True if the digit is not already contained in the block
+
+
     def get_square(self, row, col):
         #ensure row and col are appropriate
-        #validate_value(row, col)
+        if self.validate_value(row) == False:
+            print('invalid row')
+        if self.validate_value(col) == False:
+            print('invalid column')
 
         #return the value in the grid
         idx = (row - 1) * 9 + (col - 1)
@@ -64,12 +75,17 @@ class Board:
 
     def set_square(self, row, col, val):
         #ensure row and col are appropriate
-        #validate_value(row, col)
+        if self.validate_value(row) == False:
+            print('invalid row')
+        if self.validate_value(col) == False:
+            print('invalid column')
 
         #ensure value is appropriate
-        if not(val > 0 and val < 10):
-            #error
-            print('inappropriate value')
+        # if not(val > 0 and val < 10):
+        #     #error
+        #     print('inappropriate value')
+        if self.validate_value(val) == False:
+            print('invalid value')
         else:
             idx = (row - 1) * 9 + (col - 1)
             self.grid[idx] = val
@@ -93,7 +109,7 @@ class Board:
         print('')
         print('---------------------')
 
-    def validate_value(val):
+    def validate_value(self, val):
         if not(val > 0 and val < 10):
             return False
         else:
