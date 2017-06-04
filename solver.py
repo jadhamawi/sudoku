@@ -18,8 +18,30 @@ class Board:
         for i in range(0,81):
             self.grid.append(0)
 
-        #let's try a backtracking approach
+
+
+
+        ### let's try a backtracking algorithm
+
         idx = 0
+
+        # let's seed the first row randomly
+        # there are 9 digits to permute, therefore 9! permutations
+        # almost 360k permutations
+
+        for j in range(0,9):
+            seed = random.randint(1,9)
+            while not(self.check_row(j, seed)):
+                seed = random.randint(1,9)
+                print(self.grid[j])
+                print(self.check_row(j,self.grid[j]))
+            self.grid[j] = seed
+
+        self.print_board()
+
+        # now must idx must refer to start of second row
+
+        idx = 9
 
         while 0 in self.grid:
             if self.grid[idx] < 9:
@@ -40,7 +62,10 @@ class Board:
                 self.grid[idx] = digit
                 idx = idx + 1
 
+        ### end back tracking algorithm
+
     def check_sudoku_conditions(self, i, digit):
+    # returns True if the digit is not already contained in the row, col, or block
         a = self.check_row(i, digit)
         b = self.check_col(i, digit)
         c = self.check_block(i, digit)
