@@ -62,57 +62,57 @@ class Board:
         print('the solution to the board is: ')
         self.print_board(self.soln)
 
-        puzzle = []
-        for i in range(0,81):
-            puzzle.append(0)
+        self.puzzle = self.soln[:]
 
         ### now let's remove values from squares at random
         # k is a counter variable, is the number of pairs we are removing
         k = 0
 
-        # while k < 3:   # arbitrary
-        #     #print(k)
+        while k < 10:   # arbitrary
+            #print(k)
+            r = random.randint(1,9)
+            c = random.randint(1,9)
+            #print('soln grid before set: ')
+            #self.print_board(self.soln)
+            self.set_square(self.puzzle, r, c, 0)
+            self.set_square(self.puzzle, c, r, 0)
+            # self.puzzle[(r-1)*9+(c-1)] = 0
+            # self.puzzle[(c-1)*9+(r-1)] = 0
+            #self.print_board(puzzle)
+            #print('soln grid after set: ')
+            #self.print_board(self.soln)
+            #print('puzzle grid: ')
+            #self.print_board(self.puzzle)
+            if self.solve_board(self.puzzle):
+                # print('keeping the zero')
+                # self.print_board(puzzle)
+                k = k + 1
+            else:
+                # revert the removal
+                self.set_square(self.puzzle, r, c, self.get_square(self.soln, r, c))
+                self.set_square(self.puzzle, c, r, self.get_square(self.soln, c, r))
+        #self.puzzle = puzzle
+        print('the puzzle looks like: ')
+        self.print_board(self.puzzle)
+
+        #new approach: add values to a grid based on the soln
+        # while k < 22:
         #     r = random.randint(1,9)
         #     c = random.randint(1,9)
-        #     print('soln grid before set: ')
-        #     self.print_board(self.soln)
-        #     self.set_square(puzzle, r, c, 0)
-        #     self.set_square(puzzle, c, r, 0)
-        #     #self.print_board(puzzle)
-        #     print('soln grid after set: ')
-        #     self.print_board(self.soln)
-        #     print('puzzle grid: ')
-        #     self.print_board(puzzle)
+        #
+        #     self.set_square(puzzle, r, c, self.get_square(self.soln, r, c))
+        #     self.set_square(puzzle, c, r, self.get_square(self.soln, c, r))
+        #
         #     if self.solve_board(puzzle):
-        #         # print('keeping the zero')
-        #         # self.print_board(puzzle)
-        #         k = k + 1
+        #         k = k+1
         #     else:
-        #         # revert the removal
-        #         self.set_square(puzzle, r, c, self.get_square(self.soln, r, c))
-        #         self.set_square(puzzle, c, r, self.get_square(self.soln, c, r))
+        #         print('revert')
+        #         self.set_square(puzzle, r, c, 0)
+        #         self.set_square(puzzle, c, r, 0)
+        #
         # self.puzzle = puzzle
         # print('the puzzle looks like: ')
         # self.print_board(self.puzzle)
-
-        #new approach: add values to a grid based on the soln
-        while k < 22:
-            r = random.randint(1,9)
-            c = random.randint(1,9)
-
-            self.set_square(puzzle, r, c, self.get_square(self.soln, r, c))
-            self.set_square(puzzle, c, r, self.get_square(self.soln, c, r))
-
-            if self.solve_board(puzzle):
-                k = k+1
-            else:
-                print('revert')
-                self.set_square(puzzle, r, c, 0)
-                self.set_square(puzzle, c, r, 0)
-
-        self.puzzle = puzzle
-        print('the puzzle looks like: ')
-        self.print_board(self.puzzle)
 
 
     def solve_board(self, grid):
