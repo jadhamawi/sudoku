@@ -5,7 +5,7 @@ import random
 ### Solver class
 class Board:
     def __init__(self):
-        #board size
+        #future: adjustable board size
         self.board = self.create_board()
         #self.print_board(self.grid)
 
@@ -65,12 +65,24 @@ class Board:
         self.puzzle = self.soln
 
         ### now let's remove values from squares at random
-        while solve_board(self.puzzle)
-                r = random.randint(1,9)
-                c = random.randint(1,9)
+        k = 0
 
-                self.set_square(self.puzzle, r,c,0)
-                self.set_square(self.puzzle, c,r,0)
+        while k < 20:   # arbitrary
+            print(k)
+            r = random.randint(1,9)
+            c = random.randint(1,9)
+
+            self.set_square(self.puzzle, r, c, 0)
+            self.set_square(self.puzzle, c, r, 0)
+            self.print_board(self.puzzle)
+            if self.solve_board(self.puzzle):
+                print('keeping the zero')
+                self.print_board(self.puzzle)
+                k = k + 1
+            else:
+                # revert the removal
+                self.set_square(self.puzzle, r, c, get_square(self.soln, r, c))
+                self.set_square(self.puzzle, c, r, get_square(self.soln, c, r))
 
         print('the puzzle looks like: ')
         self.print_board(self.puzzle)
@@ -79,7 +91,7 @@ class Board:
     def solve_board(self, grid):
     # input: puzzle
     # output: all empty squares filled in with appropriate value
-
+        
         #index with which we traverse through grid
         idx = 0
 
@@ -97,8 +109,8 @@ class Board:
 
             idx = idx + 1
 
-        print('solved board:')
-        self.print_board(grid)
+        # print('solved board:')
+        # self.print_board(grid)
 
         return True
 
