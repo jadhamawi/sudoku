@@ -11,8 +11,8 @@ class Board:
 
     def create_board(self):
 
-        #this grid contains the solution, not the puzzle
         self.soln = []
+        self.puzzle = []
 
         # let's prefill all squares with a zero
         # after this, we will stop appending
@@ -62,40 +62,68 @@ class Board:
         print('the solution to the board is: ')
         self.print_board(self.soln)
 
-        self.puzzle = self.soln
+        puzzle = []
+        for i in range(0,81):
+            puzzle.append(0)
 
         ### now let's remove values from squares at random
+        # k is a counter variable, is the number of pairs we are removing
         k = 0
 
-        while k < 20:   # arbitrary
-            print(k)
+        # while k < 3:   # arbitrary
+        #     #print(k)
+        #     r = random.randint(1,9)
+        #     c = random.randint(1,9)
+        #     print('soln grid before set: ')
+        #     self.print_board(self.soln)
+        #     self.set_square(puzzle, r, c, 0)
+        #     self.set_square(puzzle, c, r, 0)
+        #     #self.print_board(puzzle)
+        #     print('soln grid after set: ')
+        #     self.print_board(self.soln)
+        #     print('puzzle grid: ')
+        #     self.print_board(puzzle)
+        #     if self.solve_board(puzzle):
+        #         # print('keeping the zero')
+        #         # self.print_board(puzzle)
+        #         k = k + 1
+        #     else:
+        #         # revert the removal
+        #         self.set_square(puzzle, r, c, self.get_square(self.soln, r, c))
+        #         self.set_square(puzzle, c, r, self.get_square(self.soln, c, r))
+        # self.puzzle = puzzle
+        # print('the puzzle looks like: ')
+        # self.print_board(self.puzzle)
+
+        #new approach: add values to a grid based on the soln
+        while k < 22:
             r = random.randint(1,9)
             c = random.randint(1,9)
 
-            self.set_square(self.puzzle, r, c, 0)
-            self.set_square(self.puzzle, c, r, 0)
-            self.print_board(self.puzzle)
-            if self.solve_board(self.puzzle):
-                print('keeping the zero')
-                self.print_board(self.puzzle)
-                k = k + 1
-            else:
-                # revert the removal
-                self.set_square(self.puzzle, r, c, get_square(self.soln, r, c))
-                self.set_square(self.puzzle, c, r, get_square(self.soln, c, r))
+            self.set_square(puzzle, r, c, self.get_square(self.soln, r, c))
+            self.set_square(puzzle, c, r, self.get_square(self.soln, c, r))
 
+            if self.solve_board(puzzle):
+                k = k+1
+            else:
+                print('revert')
+                self.set_square(puzzle, r, c, 0)
+                self.set_square(puzzle, c, r, 0)
+
+        self.puzzle = puzzle
         print('the puzzle looks like: ')
         self.print_board(self.puzzle)
 
 
     def solve_board(self, grid):
     # input: puzzle
-    # output: all empty squares filled in with appropriate value
-        
+    # output: True if puzzle can be solved, False otherwise
+
         #index with which we traverse through grid
         idx = 0
 
-        while 0 in grid: # grid contains empty squares
+        #while 0 in grid: # grid contains empty squares
+        while idx < 81:
             if grid[idx] == 0: # only fill in empty squares
                 digit = grid[idx] + 1
                 while digit!=0 and not(self.check_sudoku_conditions(grid, idx,digit)):
@@ -104,8 +132,8 @@ class Board:
                         print('no solution')
                         return False
 
-                if digit!=0:
-                    grid[idx] = digit
+                # if digits!=0:
+                #     grid[idx] = digit
 
             idx = idx + 1
 
