@@ -67,18 +67,21 @@ class Board:
         # k is a counter variable, is the number of pairs we are removing
         k = 0
 
-        while k < 24:   # arbitrary
-
+        while k < 15:   # arbitrary
+            #choose random row and column
             r = random.randint(1,9)
             c = random.randint(1,9)
 
+            #ensure that the chosen square has not already had its value removed
             while self.get_square(self.puzzle, r, c) == 0:
                 r = random.randint(1,9)
                 c = random.randint(1,9)
 
+            #set the value at the random location (and it's reflection along diagonal) to zero
             self.set_square(self.puzzle, r, c, 0)
             self.set_square(self.puzzle, c, r, 0)
 
+            #if board has puzzle solution is unique
             if self.solve_board(self.puzzle):
                 k = k + 1
             else:
@@ -93,28 +96,37 @@ class Board:
     # input: puzzle
     # output: True if puzzle can be solved, False otherwise
 
+        uniques = []
+
+        for i in range(0,81):
+            uniques.append(True)
+
         #index with which we traverse through grid
         idx = 0
 
         #while 0 in grid: # grid contains empty squares
         while idx < 81:
+            print(idx)
             if grid[idx] == 0: # only concerned with empty squares
                 digit = grid[idx] + 1
                 while digit!=0 and not(self.check_sudoku_conditions(grid, idx,digit)):
                     digit = digit + 1
+                    if digit == self.soln[idx]:
+                        digit = digit + 1
                     if digit > 9:
-                        print('no solution')
-                        return False
-                
-                # if digit!=0:
-                #     grid[idx] = digit
+                        print('unique value at square')
+                        uniques[idx] = True
+                        break
+                    # new solution found
+                    print('new soln found')
+                    uniques[idx] = False
 
             idx = idx + 1
 
-        # print('solved board:')
-        # self.print_board(grid)
-
-        return True
+        if False in uniques:
+            return False
+        else:
+            return True
 
     def check_sudoku_conditions(self, grid, i, digit):
     # returns True if the digit is not already contained in the row, col, or block
