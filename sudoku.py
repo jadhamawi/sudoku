@@ -72,7 +72,7 @@ class Board:
         ### now let's remove values from puzzle grid at random
         # k is a counter variable, is the number of pairs we are removing
         k = 0
-        maxPairs = 25 # arbitrary - related to difficulty level of puzzle
+        maxPairs = 20 # arbitrary - related to difficulty level of puzzle
 
         # loops ensures that if we get stuck in an infinite loop, we'll be able to break
         loops = 0
@@ -100,7 +100,8 @@ class Board:
             self.set_square(self.puzzle, c, r, 0)
 
             #if board has puzzle solution is unique
-            if self.unique_soln(self.puzzle):
+            #if self.unique_soln(self.puzzle):
+            if self.solve_board(self.puzzle[:]) == self.soln:
                 k = k + 1
             else:
                 # revert the removal
@@ -110,7 +111,45 @@ class Board:
         print('the Sudoku puzzle is: ')
         self.print_board(self.puzzle)
 
+    def solve_board(self, grid):
+        # input: puzzle
+        # output: solved board
+        # the algorithm tries to solve the puzzle by first looking for solutions
+        #   that do not use the same numbers as in the original solution
+        # if the only solution the solver can find is self.soln, then self.soln
+        #   is unique
+
+        digit = 0
+        idx = 0
+
+        while 0 in grid:
+            if grid[idx] == 0:
+                digit = grid[idx] + 1
+                while digit!=0 and not(self.check_sudoku_conditions(grid, idx, digit)):
+                    digit = digit + 1
+                    if digit == self.soln[idx]:
+                        digit = digit + 1
+                    if digit > 9:
+                        digit = 0
+                        grid[idx] = self.soln[idx]
+                        idx = idx - 1
+                        break
+                    #print(idx)
+            else:
+                idx = idx+1
+
+            if digit != 0:
+                grid[idx] = digit
+                idx = idx + 1
+                digit = 0
+
+        #print('solve_board yields: ')
+        #self.print_board(grid)
+
+        return grid
+
     def unique_soln(self, grid):
+    ### this method is not used
     # input: puzzle
     # output: True if the only solution to grid is self.soln
     # output: False if another solution to grid exists
