@@ -72,7 +72,7 @@ class Board:
         ### now let's remove values from puzzle grid at random
         # k is a counter variable, is the number of pairs we are removing
         k = 0
-        maxPairs = 20 # arbitrary - related to difficulty level of puzzle
+        maxPairs = 15 # arbitrary - related to difficulty level of puzzle
 
         # loops ensures that if we get stuck in an infinite loop, we'll be able to break
         loops = 0
